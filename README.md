@@ -1,4 +1,4 @@
-# MCAzureRM is modified and based from https://github.com/gbowerman/azurerm #
+# MCAzureRM is modified and based on https://github.com/gbowerman/azurerm #
 
 i created this repro to leverage AzureRM on Mooncake.
 
