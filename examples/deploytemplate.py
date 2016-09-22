@@ -1,10 +1,10 @@
 import json
 
-import azurerm
+import mcmcazurerm
 
 # Load Azure app defaults
 try:
-    with open('azurermconfig.json') as configFile:
+    with open('mcmcazurermconfig.json') as configFile:
         configData = json.load(configFile)
 except FileNotFoundError:
     print("Error: Expecting vmssConfig.json in current folder")
@@ -17,7 +17,7 @@ subscription_id = configData['subscriptionId']
 
 location = 'Southeast Asia'
 
-access_token = azurerm.get_access_token(tenant_id, app_id, app_secret)
+access_token = mcmcazurerm.get_access_token(tenant_id, app_id, app_secret)
 
 template_uri = 'https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-vmss-lapstack-autoscale/azuredeploy.json'
 
@@ -27,7 +27,7 @@ print('Enter new resource group name')
 rgname = input()
 
 # create resource group
-rgreturn = azurerm.create_resource_group(access_token, subscription_id, rgname, location)
+rgreturn = mcmcazurerm.create_resource_group(access_token, subscription_id, rgname, location)
 print(rgreturn)
 
 print('Enter VMSS name')
@@ -50,5 +50,5 @@ password = input()
 
 params = params.replace('ADMINPASSWORD', password)
 
-deploy_return = azurerm.deploy_template_uri(access_token, subscription_id, rgname, 'mydep3', template_uri, params)
+deploy_return = mcmcazurerm.deploy_template_uri(access_token, subscription_id, rgname, 'mydep3', template_uri, params)
 print(deploy_return)

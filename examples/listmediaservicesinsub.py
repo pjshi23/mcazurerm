@@ -4,7 +4,7 @@ Description: Simple Azure Resource Manager Python library
 License: MIT (see LICENSE.txt file for details)
 """
 import json
-import azurerm
+import mcmcazurerm
 
 # Load Azure app defaults
 try:
@@ -19,14 +19,14 @@ app_id = configData['appId']
 app_secret = configData['appSecret']
 subscription_id = configData['subscriptionId']
 
-access_token = azurerm.get_access_token(
+access_token = mcmcazurerm.get_access_token(
 	tenant_id,
 	app_id,
 	app_secret
 )
 
 # list subscriptions
-subscriptions = azurerm.list_subscriptions(access_token)
+subscriptions = mcmcazurerm.list_subscriptions(access_token)
 for sub in subscriptions["value"]:
 	print("SUBSCRIPTION: " + sub["displayName"] + ': ' + sub["subscriptionId"])
 
@@ -34,7 +34,7 @@ for sub in subscriptions["value"]:
 subscription_id = subscriptions["value"][0]["subscriptionId"]
 
 # list media services
-media_services = azurerm.list_media_services(access_token, subscription_id)
+media_services = mcmcazurerm.list_media_services(access_token, subscription_id)
 for ms in media_services["value"]:
 	print("MEDIA SERVICES: " + ms["name"] + ', REGION: ' + ms["location"])
 

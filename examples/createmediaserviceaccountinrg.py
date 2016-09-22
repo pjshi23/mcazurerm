@@ -4,7 +4,7 @@ Description: Simple Azure Resource Manager Python library
 License: MIT (see LICENSE.txt file for details)
 """
 import json
-import azurerm
+import mcmcazurerm
 
 # Load Azure app defaults
 try:
@@ -22,14 +22,14 @@ resourceGroup = configData['resourceGroup']
 stoaccountName = configData['stoaccountName']
 region = configData['region']
 
-access_token = azurerm.get_access_token(
+access_token = mcmcazurerm.get_access_token(
 	tenant_id,
 	app_id,
 	app_secret
 )
 
 # list subscriptions
-subscriptions = azurerm.list_subscriptions(access_token)
+subscriptions = mcmcazurerm.list_subscriptions(access_token)
 for sub in subscriptions["value"]:
 	print("SUBSCRIPTION: " + sub["displayName"] + ': ' + sub["subscriptionId"])
 
@@ -38,7 +38,7 @@ subscription_id = subscriptions["value"][0]["subscriptionId"]
 
 # create a media service account in a resource group
 name = "itisjustasimpletest"
-response = azurerm.create_media_service_rg(access_token, subscription_id, resourceGroup, region, stoaccountName, name)
+response = mcmcazurerm.create_media_service_rg(access_token, subscription_id, resourceGroup, region, stoaccountName, name)
 if (response.status_code == 201):
 	print("MEDIA SERVICE ACCOUNT: '" + name.upper() + "' CREATED OK.")
 else:

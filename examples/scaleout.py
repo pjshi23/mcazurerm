@@ -1,11 +1,11 @@
 # To do: change this scale test to not hardcode the sku size
 import json
 
-import azurerm
+import mcmcazurerm
 
 # Load Azure app defaults
 try:
-    with open('azurermconfig.json') as configFile:
+    with open('mcmcazurermconfig.json') as configFile:
         configData = json.load(configFile)
 except FileNotFoundError:
     print("Error: Expecting vmssConfig.json in current folder")
@@ -28,14 +28,14 @@ def scale_event(scaleNum, access_token):
     global vmssname
     global subscription_id
     newCapacity = vmssProperties[1] + scaleNum
-    scaleoutput = azurerm.scale_vmss(access_token, subscription_id, rgname, vmssname, 'Standard_A1', 'Standard',
+    scaleoutput = mcmcazurerm.scale_vmss(access_token, subscription_id, rgname, vmssname, 'Standard_A1', 'Standard',
                                      newCapacity)
     print(scaleoutput)
 
 
-access_token = azurerm.get_access_token(tenant_id, app_id, app_secret)
+access_token = mcmcazurerm.get_access_token(tenant_id, app_id, app_secret)
 
-vmssget = azurerm.get_vmss(access_token, subscription_id, rgname, vmssname)
+vmssget = mcmcazurerm.get_vmss(access_token, subscription_id, rgname, vmssname)
 print(json.dumps(vmssget, sort_keys=False, indent=2, separators=(',', ': ')))
 name = vmssget['name']
 print('Name: ' + name)
