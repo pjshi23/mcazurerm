@@ -1,6 +1,6 @@
 # settings.py - place to store constants for azurerm
 
-azure_rm_endpoint = 'https://management.azure.com'
+azure_rm_endpoint = 'https://management.chinacloudapi.cn'
 
 BASE_API = '2015-01-01'
 COMP_API = '2016-03-30'
