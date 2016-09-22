@@ -12,31 +12,31 @@ feel free to let me know if you have any question -> raise issues
 
 
 
-# azurerm
+# Mooncake AzureRM
 Easy to use Python library for Azure Resource Manager.
 
-The azurerm philosophy is ease of use over completeness of API. Rather than support every possible attribute the goal is to provide a set of simple functions for the most common tasks that anyone can extend. 
+The mcazurerm philosophy is ease of use over completeness of API. Rather than support every possible attribute the goal is to provide a set of simple functions for the most common tasks that anyone can extend. 
 
 Note: This is not an official Microsoft library, just some REST wrappers to make it easier to call the Azure REST API. For the official Microsoft Azure library for Python please go here: <a href="https://github.com/Azure/azure-sdk-for-python">https://github.com/Azure/azure-sdk-for-python</a>.
 
 
 #### Example to list Azure subscriptions, create a Resource Group, list Resource Groups
 ```
-import azurerm
+import mcazurerm
 
 tenant_id = 'your-tenant-id'
 application_id = 'your-application-id'
 application_secret = 'your-application-secret'
 
 # create an authentication token
-access_token = azurerm.get_access_token(
+access_token = mcazurerm.get_access_token(
     tenant_id,
     application_id,
     application_secret
 )
 
 # list subscriptions
-subscriptions = azurerm.list_subscriptions(access_token)
+subscriptions = mcazurerm.list_subscriptions(access_token)
 for sub in subscriptions["value"]:
     print(sub["displayName"] + ': ' + sub["subscriptionId"])
 
@@ -47,19 +47,19 @@ subscription_id = subscriptions["value"][0]["subscriptionId"]
 print('Enter Resource group name to create.')
 rgname = input()
 location = 'southeastasia'
-rgreturn = azurerm.create_resource_group(access_token, subscription_id, rgname, location)
+rgreturn = mcazurerm.create_resource_group(access_token, subscription_id, rgname, location)
 print(rgreturn)
 print(json.dumps(rgreturn.json(), sort_keys=False, indent=2, separators=(',', ': ')))
 
 # list resource groups
-resource_groups = azurerm.list_resource_groups(access_token, subscription_id)
+resource_groups = mcazurerm.list_resource_groups(access_token, subscription_id)
 for rg in resource_groups["value"]:
     print(rg["name"] + ', ' + rg["location"] + ', ' + rg["properties"]["provisioningState"])
 ``` 
 
 #### Example to create a virtual machine
 ```
-import azurerm
+import mcazurerm
 impor json
 
 tenant_id = 'your-tenant-id'
@@ -67,37 +67,37 @@ application_id = 'your-application-id'
 application_secret = 'your-application-secret'
 
 # authenticate
-access_token = azurerm.get_access_token(tenant_id, app_id, app_secret)
+access_token = mcazurerm.get_access_token(tenant_id, app_id, app_secret)
 
 # create resource group
 print('Creating resource group: ' + name)
-rmreturn = azurerm.create_resource_group(access_token, subscription_id, name, location)
+rmreturn = mcazurerm.create_resource_group(access_token, subscription_id, name, location)
 print(rmreturn)
 
 # create NSG
 nsg_name = name + 'nsg'
 print('Creating NSG: ' + nsg_name)
-rmreturn = azurerm.create_nsg(access_token, subscription_id, name, nsg_name, location)
+rmreturn = mcazurerm.create_nsg(access_token, subscription_id, name, nsg_name, location)
 nsg_id = rmreturn.json()['id']
 print('nsg_id = ' + nsg_id)
 
 # create NSG rule
 nsg_rule = 'ssh'
 print('Creating NSG rule: ' + nsg_rule)
-rmreturn = azurerm.create_nsg_rule(access_token, subscription_id, name, nsg_name, nsg_rule, description='ssh rule',
+rmreturn = mcazurerm.create_nsg_rule(access_token, subscription_id, name, nsg_name, nsg_rule, description='ssh rule',
                                   destination_range='22')
 print(rmreturn)
 print(json.dumps(rmreturn.json(), sort_keys=False, indent=2, separators=(',', ': ')))
 
 # create storage account
 print('Creating storage account: ' + name)
-rmreturn = azurerm.create_storage_account(access_token, subscription_id, name, name, location, storage_type='Premium_LRS')
+rmreturn = mcazurerm.create_storage_account(access_token, subscription_id, name, name, location, storage_type='Premium_LRS')
 print(rmreturn)
 
 # create VNET
 vnetname = name + 'vnet'
 print('Creating VNet: ' + vnetname)
-rmreturn = azurerm.create_vnet(access_token, subscription_id, name, vnetname, location, nsg_id=nsg_id)
+rmreturn = mcazurerm.create_vnet(access_token, subscription_id, name, vnetname, location, nsg_id=nsg_id)
 print(rmreturn)
 # print(json.dumps(rmreturn.json(), sort_keys=False, indent=2, separators=(',', ': ')))
 subnet_id = rmreturn.json()['properties']['subnets'][0]['id']
@@ -107,7 +107,7 @@ print('subnet_id = ' + subnet_id)
 public_ip_name = name + 'ip'
 dns_label = name + 'ip'
 print('Creating public IP address: ' + public_ip_name)
-rmreturn = azurerm.create_public_ip(access_token, subscription_id, name, public_ip_name, dns_label, location)
+rmreturn = mcazurerm.create_public_ip(access_token, subscription_id, name, public_ip_name, dns_label, location)
 print(rmreturn)
 ip_id = rmreturn.json()['id']
 print('ip_id = ' + ip_id)
@@ -115,7 +115,7 @@ print('ip_id = ' + ip_id)
 # create NIC
 nic_name = name + 'nic'
 print('Creating NIC: ' + nic_name)
-rmreturn = azurerm.create_nic(access_token, subscription_id, name, nic_name, ip_id, subnet_id, location)
+rmreturn = mcazurerm.create_nic(access_token, subscription_id, name, nic_name, ip_id, subnet_id, location)
 print(rmreturn)
 nic_id = rmreturn.json()['id']
 
@@ -131,7 +131,7 @@ username = 'rootuser'
 password = 'myPassw0rd'
 
 print('Creating VM: ' + vm_name)
-rmreturn = azurerm.create_vm(access_token, subscription_id, name, vm_name, vm_size, publisher, offer, sku,
+rmreturn = mcazurerm.create_vm(access_token, subscription_id, name, vm_name, vm_size, publisher, offer, sku,
                              version, name, os_uri, username, password, nic_id, location)
 print(rmreturn)
 print(json.dumps(rmreturn.json(), sort_keys=False, indent=2, separators=(',', ': ')))
@@ -140,7 +140,7 @@ print(json.dumps(rmreturn.json(), sort_keys=False, indent=2, separators=(',', ':
 #### Example to create a Media Services Account
 ```
 import json
-import azurerm
+import mcazurerm
 
 # Load Azure app defaults
 try:
@@ -158,14 +158,14 @@ resourceGroup = configData['resourceGroup']
 stoaccountName = configData['stoaccountName']
 region = configData['region']
 
-access_token = azurerm.get_access_token(
+access_token = mcazurerm.get_access_token(
         tenant_id,
         app_id,
         app_secret
 )
 
 # list subscriptions
-subscriptions = azurerm.list_subscriptions(access_token)
+subscriptions = mcazurerm.list_subscriptions(access_token)
 for sub in subscriptions["value"]:
         print("SUBSCRIPTION: " + sub["displayName"] + ': ' + sub["subscriptionId"])
 
@@ -174,7 +174,7 @@ subscription_id = subscriptions["value"][0]["subscriptionId"]
 
 # create a media service account in a resource group
 name = "itisjustasimpletest"
-response = azurerm.create_media_service_rg(access_token, subscription_id, resourceGroup, region, stoaccountName, name)
+response = mcazurerm.create_media_service_rg(access_token, subscription_id, resourceGroup, region, stoaccountName, name)
 if (response.status_code == 201):
         print("MEDIA SERVICE ACCOUNT: '" + name.upper() + "' CREATED OK.")
 else:
