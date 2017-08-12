@@ -474,7 +474,7 @@ def upgrade_vmss_vms(access_token, subscription_id, resource_group, vmss_name, i
 # create_manageddisk(access_token, subscription_id, resource_group, disk_name, body)
 def create_manageddisk(access_token, subscription_id, resource_group, disk_name, location, createOption, disksize_GB):
 	endpoint = ''.join([azure_rm_endpoint,
-						'/subscription/', subscription_id,
+						'/subscriptions/', subscription_id,
 						'/resourceGroups/', resource_group,
 						'/providers/Microsoft.Compute/disks/', disk_name,
 						'?api-version=', COMP_API])
