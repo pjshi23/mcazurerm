@@ -1,10 +1,10 @@
 import json
 
-import mcmcazurerm
+import mcazurerm
 
 # Load Azure app defaults
 try:
-    with open('mcmcazurermconfig.json') as configFile:
+    with open('mcazurermconfig.json') as configFile:
         configData = json.load(configFile)
 except FileNotFoundError:
     print("Error: Expecting vmssConfig.json in current folder")
@@ -15,13 +15,13 @@ app_id = configData['appId']
 app_secret = configData['appSecret']
 subscription_id = configData['subscriptionId']
 
-access_token = mcmcazurerm.get_access_token(tenant_id, app_id, app_secret)
+access_token = mcazurerm.get_access_token(tenant_id, app_id, app_secret)
 
 # loop through resource groups
-resource_groups = mcmcazurerm.list_resource_groups(access_token, subscription_id)
+resource_groups = mcazurerm.list_resource_groups(access_token, subscription_id)
 for rg in resource_groups["value"]:
     rgname = rg["name"]
-    vmsslist = mcmcazurerm.list_vm_scale_sets(access_token, subscription_id, rgname)
+    vmsslist = mcazurerm.list_vm_scale_sets(access_token, subscription_id, rgname)
     for vmss in vmsslist['value']:
         name = vmss['name']
         location = vmss['location']
@@ -34,14 +34,14 @@ for rg in resource_groups["value"]:
                        ', Capacity: ', str(capacity),
                        ', OS: ', offer, ' ', sku]))
         print('VMSS NICs...')
-        vmssNics = mcmcazurerm.get_vmss_nics(access_token, subscription_id, rgname, name)
+        vmssNics = mcazurerm.get_vmss_nics(access_token, subscription_id, rgname, name)
         print(json.dumps(vmssNics, sort_keys=False, indent=2, separators=(',', ': ')))
         print('VMSS Virtual machines...')
-        vms = mcmcazurerm.list_vmss_vms(access_token, subscription_id, rgname, name)
+        vms = mcazurerm.list_vmss_vms(access_token, subscription_id, rgname, name)
         # print(json.dumps(vms, sort_keys=False, indent=2, separators=(',', ': ')))
         for vm in vms['value']:
             vmId = vm['instanceId']
             print(vmId + ', ' + vm['name'] + '\n')
             print('VMSS VM NICs...')
-            vmnics = mcmcazurerm.get_vmss_vm_nics(access_token, subscription_id, rgname, name, vmId)
+            vmnics = mcazurerm.get_vmss_vm_nics(access_token, subscription_id, rgname, name, vmId)
             print(json.dumps(vmnics, sort_keys=False, indent=2, separators=(',', ': ')))

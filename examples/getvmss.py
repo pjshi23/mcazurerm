@@ -1,10 +1,10 @@
 import json
 
-import mcmcazurerm
+import mcazurerm
 
 # Load Azure app defaults
 try:
-    with open('mcmcazurermconfig.json') as configFile:
+    with open('mcazurermconfig.json') as configFile:
         configData = json.load(configFile)
 except FileNotFoundError:
     print("Error: Expecting vmssConfig.json in current folder")
@@ -17,10 +17,10 @@ subscription_id = configData['subscriptionId']
 rg = configData['resourceGroup']
 vmss = configData['vmssName']
 
-access_token = mcmcazurerm.get_access_token(tenant_id, app_id, app_secret)
+access_token = mcazurerm.get_access_token(tenant_id, app_id, app_secret)
 
 print('Printing VMSS details\n')
-vmssget = mcmcazurerm.get_vmss(access_token, subscription_id, rg, vmss)
+vmssget = mcazurerm.get_vmss(access_token, subscription_id, rg, vmss)
 name = vmssget['name']
 capacity = vmssget['sku']['capacity']
 location = vmssget['location']
@@ -29,16 +29,16 @@ sku = vmssget['properties']['virtualMachineProfile']['storageProfile']['imageRef
 print(json.dumps(vmssget, sort_keys=False, indent=2, separators=(',', ': ')))
 print('Name: ' + name + ', capacity: ' + str(capacity) + ', ' + location + ', ' + offer + ', ' + sku)
 print('\nPrinting VMSS instance view\n')
-instanceView = mcmcazurerm.get_vmss_instance_view(access_token, subscription_id, rg, vmss)
+instanceView = mcazurerm.get_vmss_instance_view(access_token, subscription_id, rg, vmss)
 print(json.dumps(instanceView, sort_keys=False, indent=2, separators=(',', ': ')))
 '''
 print('\nListing VMSS VMs\n')
-vmss_vms = mcmcazurerm.list_vmss_vms(access_token, subscription_id, rg, vmss)
+vmss_vms = mcazurerm.list_vmss_vms(access_token, subscription_id, rg, vmss)
 #print(vmss_vms)
 print(json.dumps(vmss_vms, sort_keys=False, indent=2, separators=(',', ': ')))
 for vm in vmss_vms['value']:
     instanceId = vm['instanceId']
-    vmInstanceView = mcmcazurerm.get_vmss_vm_instance_view(access_token, subscription_id, rg, vmss, instanceId)
+    vmInstanceView = mcazurerm.get_vmss_vm_instance_view(access_token, subscription_id, rg, vmss, instanceId)
     print('\nVM ' + str(instanceId) + ' instance view\n')
     print(json.dumps(vmInstanceView, sort_keys=False, indent=2, separators=(',', ': ')))
  '''

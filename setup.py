@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='mcazurerm',
-      version='0.1.0',
+      version='0.1.2',
       description='Azure Resource Manager REST wrappers',
       url='http://github.com/pjshi23/mcazurerm',
       author='Stan Peng',

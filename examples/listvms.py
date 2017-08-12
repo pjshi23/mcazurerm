@@ -1,10 +1,10 @@
 import json
 
-import mcmcazurerm
+import mcazurerm
 
 # Load Azure app defaults
 try:
-    with open('mcmcazurermconfig.json') as configFile:
+    with open('mcazurermconfig.json') as configFile:
         configData = json.load(configFile)
 except FileNotFoundError:
     print("Error: Expecting vmssConfig.json in current folder")
@@ -16,13 +16,13 @@ app_secret = configData['appSecret']
 subscription_id = configData['subscriptionId']
 resource_group = configData['resourceGroup']
 
-access_token = mcmcazurerm.get_access_token(tenant_id, app_id, app_secret)
+access_token = mcazurerm.get_access_token(tenant_id, app_id, app_secret)
 
 # loop through resource groups
-resource_groups = mcmcazurerm.list_resource_groups(access_token, subscription_id)
+resource_groups = mcazurerm.list_resource_groups(access_token, subscription_id)
 for rg in resource_groups["value"]:
     rgname = rg["name"]
-    vmlist = mcmcazurerm.list_vms(access_token, subscription_id, rgname)
+    vmlist = mcazurerm.list_vms(access_token, subscription_id, rgname)
     for vm in vmlist['value']:
         name = vm['name']
         location = vm['location']
@@ -34,5 +34,5 @@ for rg in resource_groups["value"]:
                        ', OS: ', offer, ' ', sku]))
 
 # get extension details (note the hardcoded values you'll need to change
-extn = mcmcazurerm.get_vm_extension(access_token, subscription_id, resource_group, 'MyDockerVm', 'LinuxDiagnostic')
+extn = mcazurerm.get_vm_extension(access_token, subscription_id, resource_group, 'MyDockerVm', 'LinuxDiagnostic')
 print(json.dumps(extn, sort_keys=False, indent=2, separators=(',', ': ')))

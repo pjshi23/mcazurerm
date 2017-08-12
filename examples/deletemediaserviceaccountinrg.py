@@ -4,7 +4,7 @@ Description: Simple Azure Resource Manager Python library
 License: MIT (see LICENSE.txt file for details)
 """
 import json
-import mcmcazurerm
+import mcazurerm
 
 # Load Azure app defaults
 try:
@@ -22,14 +22,14 @@ resourceGroup = configData['resourceGroup']
 stoaccountName = configData['stoaccountName']
 region = configData['region']
 
-access_token = mcmcazurerm.get_access_token(
+access_token = mcazurerm.get_access_token(
 	tenant_id,
 	app_id,
 	app_secret
 )
 
 # list subscriptions
-subscriptions = mcmcazurerm.list_subscriptions(access_token)
+subscriptions = mcazurerm.list_subscriptions(access_token)
 for sub in subscriptions["value"]:
 	print("SUBSCRIPTION: " + sub["displayName"] + ': ' + sub["subscriptionId"])
 
@@ -38,7 +38,7 @@ subscription_id = subscriptions["value"][0]["subscriptionId"]
 
 # delete a media service account in a resource group
 name = "itisjustasimpletest"
-response = mcmcazurerm.delete_media_service_rg(access_token, subscription_id, resourceGroup, region, stoaccountName, name)
+response = mcazurerm.delete_media_service_rg(access_token, subscription_id, resourceGroup, region, stoaccountName, name)
 if (response.status_code == 200):
 	print("MEDIA SERVICE ACCOUNT: '" + name.upper() + "' DELETED OK.")
 else:

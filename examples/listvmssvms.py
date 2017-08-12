@@ -1,10 +1,10 @@
 import json
 
-import mcmcazurerm
+import mcazurerm
 
 # Load Azure app defaults
 try:
-    with open('mcmcazurermconfig.json') as configFile:
+    with open('mcazurermconfig.json') as configFile:
         configData = json.load(configFile)
 except FileNotFoundError:
     print("Error: Expecting vmssConfig.json in current folder")
@@ -15,15 +15,15 @@ app_id = configData['appId']
 app_secret = configData['appSecret']
 subscription_id = configData['subscriptionId']
 
-access_token = mcmcazurerm.get_access_token(tenant_id, app_id, app_secret)
+access_token = mcazurerm.get_access_token(tenant_id, app_id, app_secret)
 resource_group = 'ah1'
 vmssname = 'ah1'
 
-instanceviewlist = mcmcazurerm.list_vmss_vm_instance_view(access_token, subscription_id, resource_group, vmssname)
+instanceviewlist = mcazurerm.list_vmss_vm_instance_view(access_token, subscription_id, resource_group, vmssname)
 for vm in instanceviewlist['value']:
     ud = vm['properties']['instanceView']['platformUpdateDomain']
     fd = vm['properties']['instanceView']['platformFaultDomain']
     print('UD: ' + str(ud) + ', FD: ' + str(fd))
 # print(json.dumps(instanceviewlist, sort_keys=False, indent=2, separators=(',', ': ')))
-# vms = mcmcazurerm.list_vmss_vms(access_token, subscription_id, 'ah1', 'ah1')
+# vms = mcazurerm.list_vmss_vms(access_token, subscription_id, 'ah1', 'ah1')
 # print(json.dumps(vms, sort_keys=False, indent=2, separators=(',', ': ')))

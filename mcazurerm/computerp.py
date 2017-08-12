@@ -483,5 +483,32 @@ def create_manageddisk(access_token, subscription_id, resource_group, disk_name,
 						'"createOption": "', createOption, '"},',
 						'"diskSizeGB": ', disksize_GB, '}}'])
 	return do_put(endpoint, body, access_token)
-					
+
+	
+# delete_manageddisk(access_token,subscription_id, resource_group, disk_name)					
+def delete_manageddisk(access_token, subscription_id, resource_group, disk_name):
+    endpoint = ''.join([azure_rm_endpoint,
+                        '/subscriptions/', subscription_id,
+                        '/resourceGroups/', resource_group,
+                        '/providers/Microsoft.Compute/disks/', disk_name,
+                        '?api-version=', COMP_API])
+    return do_delete(endpoint, access_token)
+	
+# get_managedisk_rg(access_token, subscription_id, resource_group)	
+def get_managedisk_rg(access_token, subscription_id, resource_group):
+    endpoint = ''.join([azure_rm_endpoint,
+                        '/subscriptions/', subscription_id,
+                        '/resourceGroups/', resource_group,
+                        '/providers/Microsoft.Compute/disks/',
+                        '?api-version=', COMP_API])
+    return do_get(endpoint, access_token)
+
+# list_manageddisk_sub(access_token, subscription_id, resource_group)		
+def list_manageddisk_sub(access_token, subscription_id):
+    endpoint = ''.join([azure_rm_endpoint,
+                        '/subscriptions/', subscription_id,
+                        '/providers/Microsoft.Compute/disks/',
+                        '?api-version=', COMP_API])
+    return do_get(endpoint, access_token)
+
 

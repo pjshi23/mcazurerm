@@ -8,11 +8,11 @@ import json
 import sys
 import time
 
-import mcmcazurerm
+import mcazurerm
 
 
 def get_vm_ids_by_ud(access_token, subscription_id, resource_group, vmssname, updatedomain):
-    instanceviewlist = mcmcazurerm.list_vmss_vm_instance_view(access_token, subscription_id, resource_group, vmssname)
+    instanceviewlist = mcazurerm.list_vmss_vm_instance_view(access_token, subscription_id, resource_group, vmssname)
     # print(json.dumps(instanceviewlist, sort_keys=False, indent=2, separators=(',', ': ')))
 
     # loop through the instance view list, and build the vm id list of VMs in the matching UD
@@ -88,10 +88,10 @@ def main():
     app_secret = configdata['appSecret']
     subscription_id = configdata['subscriptionId']
 
-    access_token = mcmcazurerm.get_access_token(tenant_id, app_id, app_secret)
+    access_token = mcazurerm.get_access_token(tenant_id, app_id, app_secret)
 
     # get the vmss model
-    vmssmodel = mcmcazurerm.get_vmss(access_token, subscription_id, resource_group, vmssname)
+    vmssmodel = mcazurerm.get_vmss(access_token, subscription_id, resource_group, vmssname)
     # print(json.dumps(vmssmodel, sort_keys=False, indent=2, separators=(',', ': ')))
 
     if storagemode == 'platform':
@@ -111,7 +111,7 @@ def main():
             # change the version
             vmssmodel['properties']['virtualMachineProfile']['storageProfile']['imageReference']['version'] = newversion
             # put the vmss model
-            updateresult = mcmcazurerm.update_vmss(access_token, subscription_id, resource_group, vmssname,
+            updateresult = mcazurerm.update_vmss(access_token, subscription_id, resource_group, vmssname,
                                                json.dumps(vmssmodel))
             if verbose:
                 print(updateresult)
@@ -132,7 +132,7 @@ def main():
             # change the version
             vmssmodel['properties']['virtualMachineProfile']['storageProfile']['osDisk']['image']['uri'] = customuri
             # put the vmss model
-            updateresult = mcmcazurerm.update_vmss(access_token, subscription_id, resource_group, vmssname,
+            updateresult = mcazurerm.update_vmss(access_token, subscription_id, resource_group, vmssname,
                                                json.dumps(vmssmodel))
             if verbose:
                 print(updateresult)
@@ -155,7 +155,7 @@ def main():
         print('Upgrading VM IDs: ' + vmlist)
 
     # do manualupgrade on the VMs in the list
-    upgraderesult = mcmcazurerm.upgrade_vmss_vms(access_token, subscription_id, resource_group, vmssname, vmids)
+    upgraderesult = mcazurerm.upgrade_vmss_vms(access_token, subscription_id, resource_group, vmssname, vmids)
     print(upgraderesult)
 
     # now wait for upgrade to complete
@@ -164,7 +164,7 @@ def main():
         updatecomplete = False
         provisioningstate = ''
         while not updatecomplete:
-            vmssinstanceview = mcmcazurerm.get_vmss_instance_view(access_token, subscription_id, resource_group, vmssname)
+            vmssinstanceview = mcazurerm.get_vmss_instance_view(access_token, subscription_id, resource_group, vmssname)
             for status in vmssinstanceview['statuses']:
                 provisioningstate = status['code']
                 if provisioningstate == 'ProvisioningState/succeeded':
