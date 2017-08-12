@@ -475,13 +475,13 @@ def upgrade_vmss_vms(access_token, subscription_id, resource_group, vmss_name, i
 def create_manageddisk(access_token, subscription_id, resource_group, disk_name, location, createOption, disksize_GB):
 	endpoint = ''.join([azure_rm_endpoint,
 						'/subscriptions/', subscription_id,
-						'/resourceGroupName/', resource_group,
+						'/resourceGroups/', resource_group,
 						'/providers/Microsoft.Compute/disks/', disk_name,
 						'?api-version=', COMP_API])
 	body = ''.join(['{"location": "', location,
 						'", "properties": {"creationData": {',
-						'"createionOption": "', createOption, '"},',
-						'"disksize_GB": ', disksize_GB, '}}'])
+						'"createOption": "', createOption, '"},',
+						'"diskSizeGB": ', disksize_GB, '}}'])
 	return do_put(endpoint, body, access_token)
 					
 
